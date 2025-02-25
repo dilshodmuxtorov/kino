@@ -16,8 +16,8 @@ def get_video(movie_code):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT video_id, caption FROM videos WHERE id = ? ;
-        ''', (movie_code))
+        SELECT video_id, caption FROM videos WHERE id=? ;
+        ''', (movie_code,))
 
     result = cursor.fetchall()
     conn.commit()
