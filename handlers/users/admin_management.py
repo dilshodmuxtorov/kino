@@ -2,8 +2,9 @@ from aiogram import types
 from loader import dp
 from filters.admin import is_admin
 from aiogram.dispatcher import FSMContext
-from states.video import VideoState
-from utils.db_api.video_management import add_video_db
+from states.video import VideoState, MovieCode
+from utils.db_api.video_management import add_video_db, delete_video
+from utils.db_api.user_management import get_all_user
 
 
 @dp.message_handler(text = "➕Add Video")
@@ -39,5 +40,32 @@ async def get_caption(message: types.Message, state: FSMContext):
 
     await state.finish()
 
+@dp.message_handler(text = "🗑Delete Video")
+async def delete_videos(message: types.Message):
+    await message.answer("Kino kodini kiriting:")
+    await MovieCode.code.set()
+
+@dp.message_handler(state=MovieCode.code)
+async def del_video(message: types.Message, state: FSMContext):
+    if message.text.isdigit():
+        code = int(message.text)
+        if delete_video(code):       
+            await message.answer("Kino o'chirildi")
+            await state.finish()
+        else:
+            await message.answer("Kino mavjud emas!")
+        
+    else:
+        await message.answer("Kino kodini to'g'ri kiriting:")
+    
+@dp.message_handler(text = "📊 Statistika")
+async def statistics(message: types.Message):
+    
+    text = f"""Botingi haqida ma'lumot:
+
+Foydalanuvchilar: {get_all_user()[0][0]}
+Kinolar: 
+"""
+    await message.answer(text=text)
 
 

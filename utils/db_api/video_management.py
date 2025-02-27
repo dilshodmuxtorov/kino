@@ -23,3 +23,22 @@ def get_video(movie_code):
     conn.commit()
     conn.close()
     return result
+
+def delete_video(movie_code):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT * FROM videos WHERE id=?; 
+    """, (movie_code,))
+
+    result= cursor.fetchall()
+    if result == []:
+        return False
+    else:
+        cursor.execute("""
+        DELETE FROM videos WHERE id=?; 
+        """, (movie_code,))
+
+        conn.commit()
+        conn.close()
+        return True

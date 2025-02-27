@@ -5,4 +5,6 @@ class VideoState(StatesGroup):
     video = State()
     caption = State()
 
-    
+
+class MovieCode(StatesGroup):
+    code = State()   
