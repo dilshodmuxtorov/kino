@@ -74,3 +74,17 @@ def is_channel_in_database(channel_id):
     result = cursor.fetchone()
     conn.close()
     return result is not None
+
+
+def count_video():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT COUNT(*) FROM videos;
+    ''')  
+    result = cursor.fetchone()
+    conn.close()
+    if result:
+        return result[0]
+    else:
+        return None

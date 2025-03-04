@@ -3,8 +3,10 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 admin_menu = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="➕Add Video"), KeyboardButton("🗑Delete Video")],
-        [KeyboardButton(text="📊 Statistika"),KeyboardButton("➕Add Channel")]
+        [KeyboardButton("📤Foydalanuvchilarga xabar yuborish"),KeyboardButton(text="📊 Statistika")],
+        [KeyboardButton(text="➕Kino qo'shish"), KeyboardButton("🗑Kino o'chirish")],
+        [KeyboardButton("➕Kanal qo'shish"),KeyboardButton("🗑Kanal o'chirish")],
+        [KeyboardButton("🧹Botni tozalash")]
     ],
     resize_keyboard=True
 )

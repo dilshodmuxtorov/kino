@@ -14,13 +14,13 @@ class CheckSubscribeMiddleware(BaseMiddleware):
                     else update['callback_query']['from']['id']
                     ) if 'message' in update or 'callback_query' in update else 0)
 
-        # if is_user_blocked(user_id):
-        #     message = "❌ <b>Admin tomonidan botdan bloklangansiz. Blokni ochish uchun admin bilan bog'laning!</b>"
-        #     if 'message' in update:
-        #         await update.message.answer(message)
-        #     elif 'callback_query' in update:
-        #         await update.callback_query.message.answer(message)
-        #     raise CancelHandler() 
+        if is_user_blocked(user_id):
+            message = "❌ <b>Admin tomonidan botdan bloklangansiz. Blokni ochish uchun admin bilan bog'laning!</b>"
+            if 'message' in update:
+                await update.message.answer(message)
+            elif 'callback_query' in update:
+                await update.callback_query.message.answer(message)
+            raise CancelHandler() 
 
         for channel in get_channels():
             channel = int(channel[0])
