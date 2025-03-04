@@ -42,3 +42,35 @@ def delete_video(movie_code):
         conn.commit()
         conn.close()
         return True
+    
+def get_channels():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT channel_id FROM channels;
+    """)    
+
+    result = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return result
+
+def add_channel(channel_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT OR IGNORE INTO channels (channel_id) VALUES (?)
+    """, (channel_id,))
+
+    conn.commit()
+    conn.close()
+
+def is_channel_in_database(channel_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT channel_id FROM channels WHERE channel_id = ?', (channel_id,))
+    result = cursor.fetchone()
+    conn.close()
+    return result is not None

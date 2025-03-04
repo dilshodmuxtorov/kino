@@ -23,3 +23,11 @@ def get_all_user():
     conn.commit()
     conn.close()
     return result
+
+def is_user_blocked(user_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT is_blocked FROM users WHERE user_id = ?', (user_id,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else False

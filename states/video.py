@@ -8,3 +8,6 @@ class VideoState(StatesGroup):
 
 class MovieCode(StatesGroup):
     code = State()   
+
+class AddChannelState(StatesGroup):
+    channel_id = State()

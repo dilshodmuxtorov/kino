@@ -2,9 +2,10 @@ from aiogram import types
 from loader import dp
 from filters.admin import is_admin
 from aiogram.dispatcher import FSMContext
-from states.video import VideoState, MovieCode
-from utils.db_api.video_management import add_video_db, delete_video
+from states.video import VideoState, MovieCode, AddChannelState
+from utils.db_api.video_management import add_video_db, delete_video , add_channel , is_channel_in_database
 from utils.db_api.user_management import get_all_user
+from loader import bot
 
 
 @dp.message_handler(text = "➕Add Video")
@@ -69,3 +70,37 @@ Kinolar:
     await message.answer(text=text)
 
 
+
+@dp.message_handler(text = '➕Add Channel')
+async def add_channel_handler(message: types.Message):
+    if  is_admin(message.from_user.id):  
+        await message.answer("Please send the channel ID (e.g., -1001234567890):")
+        await AddChannelState.channel_id.set()  
+    else:
+        await message.answer("<b>❌ You don't have permission to add channels!</b>")
+
+@dp.message_handler(state=AddChannelState.channel_id)
+async def process_channel_id(message: types.Message, state: FSMContext):
+    channel_id = message.text.strip()
+    
+    try:
+        channel_id = int(channel_id) 
+        try:
+            chat = await bot.get_chat(channel_id)
+            chat_name = chat.full_name  
+        except Exception:
+            await message.answer("<b>❌ Invalid channel ID! Please send a valid channel ID.</b>")
+            await state.finish()
+            return
+        
+        if is_channel_in_database(channel_id):
+            await message.answer("❌ This channel is already in the database!")
+        else:
+            add_channel(channel_id)
+            await message.answer(f"✔️ Channel '{chat_name}' (ID: {channel_id}) has been added successfully!")
+        
+        await state.finish()
+    
+    except ValueError:
+        await message.answer("❌ Invalid input! Please send a valid numeric channel ID.")
+        await state.finish()

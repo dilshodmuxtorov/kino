@@ -12,7 +12,8 @@ def create_table():
         username TEXT,
         fullname TEXT,
         registrated_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        is_active BOOLEAN DEFAULT TRUE
+        is_active BOOLEAN DEFAULT TRUE,
+        is_blocked BOOLEAN DEFAULT FALSE
     )
     """)
 
@@ -21,6 +22,13 @@ def create_table():
         id INTEGER PRIMARY KEY,
         video_id TEXT,
         caption TEXT
+    )
+    ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS channels (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        channel_id BIGINT UNIQUE NOT NULL
     )
     ''')
 
