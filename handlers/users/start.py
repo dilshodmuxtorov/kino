@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 
-from loader import dp
+from loader import dp , bot
 from utils.db_api.user_management import add_user
 from utils.db_api.video_management import get_video
 from filters.admin import is_admin
@@ -37,3 +37,12 @@ botimizga xush kelibsiz.</b>
     """ 
             await message.answer(text, reply_markup=channel_btn)
 
+
+@dp.callback_query_handler(lambda c: c.data == "check_subscribe")
+async def check_subscribe_channel(call: types.CallbackQuery):
+    text =f"""<b>👋Assalomu aleykum {call.from_user.full_name}
+botimizga xush kelibsiz.</b>
+
+<i>✍🏻Kino kodini yuboring.</i>
+    """ 
+    await bot.send_message(chat_id=call.from_user.id, text=text, reply_markup=channel_btn)
